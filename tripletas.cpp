@@ -1,6 +1,7 @@
-
+#include <iostream>
+#include <chrono> // se usa para las mediciones de tiempo de ejecución
 // todo corre sobre la función principal para efectos de simplicidad
-void main() {
+int main() {
 
     // tripletas de ejemplo
     int ana[] = {10,32,14};
@@ -8,4 +9,6 @@ void main() {
     // arreglo con los valores del restultado
     // ordenado en el orden: resAna y resBob
     int res[] = {0,0};
+    std::cout << "Hello" << std::endl;
+    return 0;
 }
