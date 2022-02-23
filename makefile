@@ -1,1 +1,2 @@
-g++ tripletas.cpp
+make:
+	g++ tripletas.cpp
