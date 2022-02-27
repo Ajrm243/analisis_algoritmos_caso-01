@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <string>
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -31,7 +32,35 @@ vector<int> compareTriplets_2(vector<int> a, vector<int> b) {
 
 // Funciones para "time_conversion"
 
+// Funcion 1:
+string timeConversion_1(string input) {
+    // am indica si es AM o PM. true = am, false = PM
+    string res = "";
+    bool am = (input.compare(8,1,"A") == 0);
+    string soloDigitos = input.substr(0, 8);
+    string partesDigitos[] = {
+        soloDigitos.substr(0,2),
+        soloDigitos.substr(3,2),
+        soloDigitos.substr(6,2),
+    };
+    int partesNumeros[] = {
+        stoi(partesDigitos[0]),
+        stoi(partesDigitos[1]),
+        stoi(partesDigitos[2])
+    };
+
+    if (am) {
+        // si son las 12 AM se entiende como medianoche o las 0 en formato 24h
+        if (partesNumeros[0] == 12) {
+            res += "00";
+        }
+    }
+
+
+    //std::cout << partesNumeros[0] << endl << partesNumeros[1] << endl << partesNumeros[2] << endl << endl;
+}
 
 int main() {
+    timeConversion_1("03:40:23PM");
     return 0;
 }
