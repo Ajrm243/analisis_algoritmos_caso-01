@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <iomanip>
+#include <sstream>
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -32,7 +34,7 @@ vector<int> compareTriplets_2(vector<int> a, vector<int> b) {
 
 // Funciones para "time_conversion"
 
-// Funcion 1:
+// Funcion 1: detectar AM o PM y restar a la hora si es PM
 string timeConversion_1(string input) {
     // am indica si es AM o PM. true = am, false = PM
     string res = "";
@@ -49,8 +51,21 @@ string timeConversion_1(string input) {
         stoi(partesDigitos[2])
     };
 
-    if (am) {
-        // si son las 12 AM se entiende como medianoche o las 0 en formato 24h
+    if (!am) {
+        // si es PM hay que hacer cambios
+        // las 12 PM corresponde al mediodía, sigue siendo las 12 en formato 24h
+        if (partesNumeros[0] == 12) {
+            res += "12";
+        } else {
+            // de 1 a 11 PM se suma 12 a la hora
+            std::stringstream horaTemp;
+            // Hace que numeros como 1 o 3 se completen como 01 o 03
+            horaTemp << std::setw(2) << std::setfill('0') << partesNumeros[0];
+            res += horaTemp.str();
+        }
+    } else {
+        // si es am se mantiene la hora a menos que sean las 12 (medianoche)
+        // las 12 medianoche se registra como 00 en formato 24h
         if (partesNumeros[0] == 12) {
             res += "00";
         }
