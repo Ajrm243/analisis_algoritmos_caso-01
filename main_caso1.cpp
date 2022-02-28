@@ -60,7 +60,7 @@ string timeConversion_1(string input) {
             // de 1 a 11 PM se suma 12 a la hora
             std::stringstream horaTemp;
             // Hace que numeros como 1 o 3 se completen como 01 o 03
-            horaTemp << std::setw(2) << std::setfill('0') << partesNumeros[0];
+            horaTemp << std::setw(2) << std::setfill('0') << partesNumeros[0] + 12;
             res += horaTemp.str();
         }
     } else {
@@ -71,11 +71,16 @@ string timeConversion_1(string input) {
         }
     }
 
+    // añade el resto de la estampa del tiempo, que no se ve afectada por el formato de horas
+    res += ":" + partesDigitos[1] + ":" + partesDigitos[2];
+    return res;
+
 
     //std::cout << partesNumeros[0] << endl << partesNumeros[1] << endl << partesNumeros[2] << endl << endl;
 }
 
 int main() {
-    timeConversion_1("03:40:23PM");
+    cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_1("03:40:23PM") << endl;
+    cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_1("12:20:20AM") << endl;
     return 0;
 }
