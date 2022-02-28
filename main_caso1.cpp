@@ -35,6 +35,7 @@ vector<int> compareTriplets_2(vector<int> a, vector<int> b) {
 // Funciones para "time_conversion"
 
 // Funcion 1: detectar AM o PM y restar a la hora si es PM
+// es muy tedioso revisar todos los diferentes casos de esta manera
 string timeConversion_1(string input) {
     // am indica si es AM o PM. true = am, false = PM
     string res = "";
@@ -74,13 +75,31 @@ string timeConversion_1(string input) {
     // añade el resto de la estampa del tiempo, que no se ve afectada por el formato de horas
     res += ":" + partesDigitos[1] + ":" + partesDigitos[2];
     return res;
+}
 
+// utiliza el operador ternario para ahorrar lineas de codigo
+string timeConversion_2(string input) {
+    string res = "";
+    bool am = (input.compare(8,1,"A") == 0);
+    string soloDigitos = input.substr(0, 8);
+    string partesDigitos[] = {
+        soloDigitos.substr(0,2),
+        soloDigitos.substr(3,2),
+        soloDigitos.substr(6,2),
+    };
+    int hora = stoi(partesDigitos[0]);
 
-    //std::cout << partesNumeros[0] << endl << partesNumeros[1] << endl << partesNumeros[2] << endl << endl;
+    // solucion que hace en una linea el cambio de la hora
+    hora = am ? (hora==12 ? 0 : hora) : (hora==12 ? 12 : hora + 12);
+    std::stringstream horaTemp;
+    horaTemp << std::setw(2) << std::setfill('0') << hora;
+    res += horaTemp.str();
+    res += ":" + partesDigitos[1] + ":" + partesDigitos[2];
+    return res;
 }
 
 int main() {
-    cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_1("03:40:23PM") << endl;
-    cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_1("12:20:20AM") << endl;
+    cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_2("03:40:23PM") << endl;
+    cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_2("12:20:20AM") << endl;
     return 0;
 }
