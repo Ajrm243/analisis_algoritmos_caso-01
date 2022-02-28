@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <bits/stdc++.h>
+#include "hashtable.h"
 
 using namespace std;
 
@@ -169,13 +170,98 @@ string minionGame(string word) {
 
 }
 
+// Cipher
+// La idea es entender cómo cualquier resultado de los XORs afectan a los dígitos consecuentes
+string cipher(int n, int k, string s) {
+    int size = s.length();
+    // se hacen arreglos de tamaño n que tomen el total de elementos que tiene el string s
+    int numArr[size];
+    int resArr[size];
+    string res;
+
+    for (int i = 0; i < size; i++) {
+        numArr[i] = (int)(s[i] == '1');
+
+        if (i == 0) {
+            // es necesario preparar el primer digito para las operaciones siguientes
+            // el primer digito no se ve afectado porque los corrimientos siempre son a la derecha
+            resArr[0] = numArr[0];
+        }
+        else if (i < k) {
+            // para los primeros k - 1 digitos
+            // el digito siguiente corresponde al XOR de sí mismo con el anterior
+            resArr[i] = numArr[i] ^ numArr[i-1];
+        }
+        else {
+            // para los siguientes k hasta n - 1 digitos
+            // se necesita un dígito extra que sería el tercero que perturba los dígitos consecuentes
+            resArr[i] = numArr[i] ^ numArr[i-1] ^ resArr[i-k];
+        }
+    }
+
+    // este for convierte el arreglo de respuesta a un string
+    for (int i = 0; i < n; i++) {
+        res += to_string(resArr[i]);
+    }
+
+    return res;
+}
+
+// Pairs
+// Utiliza lógica de doble puntero, hay 2 enteros que funcionan como indexadores en un while loop para recorrer el arreglo buscando parejas
+int pairs(int n, int k, int arr[]) {
+    int parejas = 0;
+    // ordena el arreglo para facilitar los recorridos
+    sort(arr, arr + n);
+    int i = 0;
+    int j = 1;
+
+    while (i < n && j < n) {
+        if (i != j && ((arr[j] - arr[i] == k) || (arr[i] - arr[j] == k))) {
+            parejas++;
+            j++;
+        } else if (arr[j] - arr[i] > k) {
+            j++;
+        } else {
+            i++;
+        }
+    }
+    return parejas;
+}
+
 int main() {
     int array1[] = {1, 2, 1, 3, 2};
     int array2[] = {1, 1, 1, 1, 1, 1};
-    //cout << "Minion game: banana" << endl << minionGame("banana") << endl;
-    //cout << "n=5, s=[1,2,1,3,2], d=3, m=2" << endl << "soluciones: " << birthday_2(5, array1, 3, 2) << endl;
-    //cout << "n=6, s=[1, 1, 1, 1, 1, 1], d=3, m=2" << endl << "soluciones: " << birthday_2(6, array2, 3, 2) << endl;
-    //cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_2("03:40:23PM") << endl;
-    //cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_2("12:20:20AM") << endl;
+    int array3[] = {1, 5, 3, 4, 2};
+
+    // llamados a funcion
+    cout << "Tripletas: " << endl;
+    vector<int> ana = {1,2,3};
+    vector<int> bob = {3,2,1};
+    cout << "Ana= {1,2,3}, Bob = {3,2,1}" << endl << to_string(compareTriplets_1(ana, bob)[0]) + " " + to_string(compareTriplets_1(ana, bob)[1]) << endl;
+    ana = {5,6,7};
+    bob = {3,6,10};
+    cout << "Ana= {5,6,7}, Bob = {3,6,10}" << endl << to_string(compareTriplets_2(ana, bob)[0]) + " " + to_string(compareTriplets_2(ana, bob)[1]) << endl;
+
+    cout << "Time Conversion: " << endl;
+    cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_2("03:40:23PM") << endl;
+    cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_2("12:20:20AM") << endl;
+
+    cout << "Cumpleaños: " << endl;
+    cout << "n=5, s=[1,2,1,3,2], d=3, m=2" << endl << "soluciones: " << birthday_1(5, array1, 3, 2) << endl;
+    cout << "n=6, s=[1,1,1,1,1,1], d=3, m=2" << endl << "soluciones: " << birthday_2(6, array2, 3, 2) << endl;
+    
+    cout << "Minion Game: " << endl;
+    cout << "Minion game: banana" << endl << minionGame("banana") << endl;
+    cout << "Minion game: ropaje" << endl << minionGame("ropaje") << endl;
+
+    cout << "Cipher: " << endl;
+    cout << "Cipher: 1110100110, k=4" << endl << cipher(7, 4, "1110100110") << endl;
+    cout << "Cipher: 1110001, k=2" << endl << cipher(6, 2, "1110001") << endl;
+
+    cout << "Pairs: " << endl;
+    cout << "Pairs: n=5, k=2, arr= [1,5,3,4,2]" << endl << pairs(5, 2, array3) << endl;
+    cout << "Pairs: n=5, k=2, arr= [1,2,1,3,2]" << endl << pairs(5, 2, array1) << endl;
+    
     return 0;
 }
