@@ -143,15 +143,36 @@ int birthday_2(int size, int s[], int d, int m) {
 
 
 // Minion Game
-
+// El truco es reconocer que hay n+(n-1)+(n-2)+...+2+1 = n(n+1)/2 combinaciones de una palabra de tamaño n
+// Entonces es sacar el subgrupo de substrings que empiecen con consonante y luego restarle al grupo total
 string minionGame(string word) {
     int kevinScore = 0, stuartScore = 0;
+    int n = word.length();
+    int subsTotales = (n * (n+1) / 2);
+    for (int i = 0; i < n; i++) {
+        // si la letra es vocal, se agrega a las posibilidades de las palabras de Kevin
+        if (word[i] == 'a' || word[i] == 'e' || word[i] == 'i' || word[i] == 'o' || word[i] == 'u') {
+            // se suma una aparicion de palabras de tamaño n - i
+            kevinScore += (n - i);
+        }
+    }
+    stuartScore = subsTotales - kevinScore;
+
+    // comparacion de resultados
+    if (stuartScore > kevinScore) {
+        return "Stuart: " + to_string(stuartScore);
+    } else if (kevinScore > stuartScore) {
+        return "Kevin: " + to_string(kevinScore);
+    } else {
+        return "Empate";
+    }
 
 }
 
 int main() {
     int array1[] = {1, 2, 1, 3, 2};
     int array2[] = {1, 1, 1, 1, 1, 1};
+    //cout << "Minion game: banana" << endl << minionGame("banana") << endl;
     //cout << "n=5, s=[1,2,1,3,2], d=3, m=2" << endl << "soluciones: " << birthday_2(5, array1, 3, 2) << endl;
     //cout << "n=6, s=[1, 1, 1, 1, 1, 1], d=3, m=2" << endl << "soluciones: " << birthday_2(6, array2, 3, 2) << endl;
     //cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_2("03:40:23PM") << endl;
