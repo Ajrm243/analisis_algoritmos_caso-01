@@ -142,6 +142,12 @@ int birthday_2(int size, int s[], int d, int m) {
 }
 
 
+// Minion Game
+
+string minionGame(string word) {
+    int kevinScore = 0, stuartScore = 0;
+
+}
 
 int main() {
     int array1[] = {1, 2, 1, 3, 2};
