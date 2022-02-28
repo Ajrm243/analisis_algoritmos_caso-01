@@ -77,7 +77,7 @@ string timeConversion_1(string input) {
     return res;
 }
 
-// utiliza el operador ternario para ahorrar lineas de codigo
+// Funcion 2: utiliza el operador ternario para ahorrar lineas de codigo
 string timeConversion_2(string input) {
     string res = "";
     bool am = (input.compare(8,1,"A") == 0);
@@ -98,8 +98,57 @@ string timeConversion_2(string input) {
     return res;
 }
 
+
+// Funciones para "subarray_division"
+
+// Funcion 1: deducción matemática pero usa 2 FOR loops anidados
+int birthday_1(int size, int s[], int d, int m) {
+    // los segmentos tienen que ser de tamaño M
+    // la suma de los elementos en los segmentos tiene que ser igual a D
+    int suma = 0, soluciones = 0;
+
+    // Hay n-m combinaciones de elementos de M tamaño, se aprovechará esa deducción matemática
+    for (int i = 0; i <= (size - m); i++) {
+        // hará ciclos de tamaño m para acumular las sumas parciales de los elementos
+        for (int j = 0; j < m; j++) {
+            suma += s[i+j];
+        }
+        if (suma == d) {
+            soluciones++;
+        }
+        // vuelve a reiniciar la suma parcial para el siguiente segmento
+        suma = 0;
+    }
+
+    //cout << soluciones << endl;
+    return soluciones;
+}
+
+// Funcion 2: lookup de las sumas parciales posibles, tiene 2 if PERO no son anidados, lo que hace un poco mejor el performance
+int birthday_2(int size, int s[], int d, int m) {
+    #define MAX_SUMA_PARCIAL 100
+    int sumas_precalculadas[MAX_SUMA_PARCIAL];
+    int soluciones = 0;
+    sumas_precalculadas[0] = 0;
+    // calculo de las sumas parciales de todos los elementos
+    for (int i = 0; i < size; i++) sumas_precalculadas[i+1] = sumas_precalculadas[i] + s[i];
+    for (int i = 0; i <= (size - m); i++) {
+        // si la suma de los m elementos en el "lookup table" es igual al cumpleaños
+        if((sumas_precalculadas[i+m]-sumas_precalculadas[i]) == d) {
+            soluciones++;
+        }
+    }
+    return soluciones;
+}
+
+
+
 int main() {
-    cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_2("03:40:23PM") << endl;
-    cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_2("12:20:20AM") << endl;
+    int array1[] = {1, 2, 1, 3, 2};
+    int array2[] = {1, 1, 1, 1, 1, 1};
+    //cout << "n=5, s=[1,2,1,3,2], d=3, m=2" << endl << "soluciones: " << birthday_2(5, array1, 3, 2) << endl;
+    //cout << "n=6, s=[1, 1, 1, 1, 1, 1], d=3, m=2" << endl << "soluciones: " << birthday_2(6, array2, 3, 2) << endl;
+    //cout << "Original: 03:40:23PM" << endl << "24h: " + timeConversion_2("03:40:23PM") << endl;
+    //cout << "Original: 12:20:20AM" << endl << "24h: " + timeConversion_2("12:20:20AM") << endl;
     return 0;
 }
